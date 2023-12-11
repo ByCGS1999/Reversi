@@ -26,7 +26,21 @@ public class Program
     }
 
     static void menu(){
-        switch
+        System.out.println("+----------------------------------+
+                            | Col1                             |
+                            | Value 1                          |
+                            | Separate                         |
+                            | This is a row with only one cell |
+                            +----------------------------------+");
+        
+        int op = s.next();
+        switch (op)
+        {
+            case "1":
+
+        }   
     }
 
 }
+
+
