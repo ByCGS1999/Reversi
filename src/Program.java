@@ -22,4 +22,9 @@ public class Program
 
         s.close();
     }
+
+    static void menu(){
+        
+    }
+
 }
