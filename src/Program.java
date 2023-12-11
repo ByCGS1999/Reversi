@@ -47,17 +47,17 @@ public class Program
     }
 
     static void menu(){
-        System.out.println("+----------------------------------+
-                            | Col1                             |
-                            | Value 1                          |
-                            | Separate                         |
-                            | This is a row with only one cell |
-                            +----------------------------------+");
+        System.out.println("+----------------------------------+");
+        System.out.println("| Col1                             |"); 
+        System.out.println("| Value 1                          |"); 
+        System.out.println("| Separate                         |");  
+        System.out.println("| This is a row with only one cell |"); 
+        System.out.println("+----------------------------------+");
         
-        int op = s.next();
+        int op = s.nextInt();
         switch (op)
         {
-            case "1":
+            case 1:
 
         }   
     }
