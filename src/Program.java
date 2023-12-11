@@ -13,6 +13,7 @@ public class Program
     static void Init()
     {
         board = new char[8][8];
+        board[0][0] = 'c';
     }
 
     public static void main(String[] args) {
