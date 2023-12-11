@@ -4,6 +4,7 @@ import java.util.*;
 public class Program
 {
     static char[][] board;
+    static Scanner s;
 
     static void SetBoardValue(int x, int y, char c)
     {
@@ -13,11 +14,11 @@ public class Program
     static void Init()
     {
         board = new char[8][8];
-        board[0][0] = 'c';
+        
     }
 
     public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        s = new Scanner(System.in);
 
         Init();
 
