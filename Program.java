@@ -9,8 +9,15 @@ public class Program
         board[x][y] = c;
     }
 
+    static void Init()
+    {
+        board = new char[8][8];
+    }
+
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
+
+        Init();
 
         s.close();
     }
