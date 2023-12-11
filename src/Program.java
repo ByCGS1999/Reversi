@@ -15,12 +15,33 @@ public class Program
     {
         board = new char[8][8];
         
+        for(int x = 0; x < board.length; x++)
+        {
+            for(int y = 0; y < board[x].length; y++)
+            {
+                board[x][y] = '·';
+            }
+        }
+
+        board[3][3] = 'X';
+        board[4][3] = 'X';
+        board[3][4] = 'O';
+        board[4][4] = 'O';
     }
 
     public static void main(String[] args) {
         s = new Scanner(System.in);
 
         Init();
+
+        for(char c[] : board)
+        {
+            for(char x : c)
+            {
+                System.out.print(x + " ");
+            }
+            System.out.println();
+        }
 
         s.close();
     }
