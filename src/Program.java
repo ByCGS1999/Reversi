@@ -48,10 +48,8 @@ public class Program
 
     static void menu(){
         System.out.println("+----------------------------------+");
-        System.out.println("| Col1                             |"); 
-        System.out.println("| Value 1                          |"); 
-        System.out.println("| Separate                         |");  
-        System.out.println("| This is a row with only one cell |"); 
+        System.out.println("| 1.Play                           |"); 
+        System.out.println("| 2.Exit                           |"); 
         System.out.println("+----------------------------------+");
         
         int op = s.nextInt();
