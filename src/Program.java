@@ -25,7 +25,7 @@ public class Program
     }
 
     static void menu(){
-        
+        switch
     }
 
 }
