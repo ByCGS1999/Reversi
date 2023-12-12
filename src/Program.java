@@ -11,6 +11,7 @@ public class Program
 
     static char[][] board;
     static Scanner s;
+    static boolean isPlaying = false;
 
     static void SetBoardValue(int x, int y, char c)
     {
@@ -54,6 +55,11 @@ public class Program
             System.out.println();
         }
 
+        while(isPlaying)
+        {
+
+        }
+
         s.close();
     }
 
@@ -67,9 +73,10 @@ public class Program
         switch (op)
         {
             case 1:
-            break;
+               isPlaying = true;
+               break;
             case 2:
-            break;
+               break;
         }   
     }
 
