@@ -56,7 +56,9 @@ public class Program
         switch (op)
         {
             case 1:
-
+            break;
+            case 2:
+            break;
         }   
     }
 
