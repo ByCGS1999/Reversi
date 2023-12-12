@@ -3,6 +3,12 @@ import java.util.*;
 
 public class Program
 {
+    enum PlayerTurn
+    {
+        Player1,
+        Player2
+    }
+
     static char[][] board;
     static Scanner s;
 
@@ -27,6 +33,11 @@ public class Program
         board[4][3] = 'X';
         board[3][4] = 'O';
         board[4][4] = 'O';
+    }
+
+    static void HandlePlayerInput(PlayerTurn player)
+    {
+
     }
 
     public static void main(String[] args) {
