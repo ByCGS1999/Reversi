@@ -17,6 +17,26 @@ public class Program {
         return board[x][y];
     }
 
+    static ArrayList<int[]> GetNeighbors(int[] pos, int layer)
+    {
+        ArrayList<int[]> positions = new ArrayList<int[]>();
+
+        for (int y = -1; y <= 1; y++) 
+        {
+            for (int x = -1; x <= 1; x++) 
+            {
+                int[] lookoutPos = new int[] { pos[0] + layer + y, pos[1] + layer + x };
+
+                if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length && lookoutPos[1] <= board.length)
+                {
+                    positions.add(lookoutPos);
+                }
+            }
+        }
+
+        return positions;
+    }
+
     static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
         if (hasAuthority) {
             board[x][y] = c;
