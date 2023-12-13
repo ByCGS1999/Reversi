@@ -41,11 +41,8 @@ public class Program
 
     }
 
-    public static void main(String[] args) {
-        s = new Scanner(System.in);
-
-        Init();
-
+    static void OutputBoard()
+    {
         for(char c[] : board)
         {
             for(char x : c)
@@ -54,6 +51,14 @@ public class Program
             }
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        s = new Scanner(System.in);
+
+        Init();
+
+        menu();
 
         while(isPlaying)
         {
