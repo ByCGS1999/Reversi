@@ -13,13 +13,12 @@ public class Program {
     static boolean isPlaying = false;
     static PlayerTurn currentPlayerTurn = PlayerTurn.Player1;
 
-    static char GetBoardValue(int x, int y)
-    {
+    static char GetBoardValue(int x, int y) {
         return board[x][y];
     }
 
     static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
-        if (hasAuthority && board[x][y] == '·') {
+        if (hasAuthority) {
             board[x][y] = c;
             return true;
         } else if (board[x][y] == '·') {
@@ -30,25 +29,70 @@ public class Program {
         return false;
     }
 
-    static void FindNeighbors(String playerInput) {
-        int[] bp = toBoardPosition(playerInput);
-
-        int[] tl = new int[] { bp[0] - 1, bp[1] - 1 };
-        int[] tc = new int[] { bp[0] - 1, bp[1] };
-        int[] tr = new int[] { bp[0] - 1, bp[1] + 1 };
-
-        int[] cl = new int[] { bp[0], bp[1] - 1 };
-        int[] cc = new int[] { bp[0], bp[1] };
-        int[] cr = new int[] { bp[0], bp[1] + 1 };
-
-        int[] bl = new int[] { bp[0] + 1, bp[1] - 1 };
-        int[] bc = new int[] { bp[0] + 1, bp[1] };
-        int[] br = new int[] { bp[0] + 1, bp[1] + 1 };
-
-        for(int x = 0; x < 7; x++)
+    static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos) {
+        boolean result = false;
+        
+        if (oldPos[0] != -1 && oldPos[0] != -1) 
         {
-            
+            if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
+            {
+                System.out.println("is a line");
+                int[] targetPos = pos;
+                // identify the not equal one
+                if(pos[0] != oldPos[0])
+                {
+                    int yOff = pos[0]-oldPos[0];
+                    targetPos = new int[] { pos[0]+yOff, pos[1] };
+                }
+                else if(pos[1] != oldPos[1])
+                {
+                    int xOff = pos[1]-oldPos[1];
+                    targetPos = new int[] { pos[0], pos[1]+xOff };
+                }
+
+                System.out.println(targetPos[0]);
+                System.out.println(targetPos[1]);
+
+                if(GetBoardValue(targetPos[0], targetPos[1]) == playerChar)
+                {
+                    SetBoardValue(pos[0], pos[1], playerChar, true);
+                    result = true;
+                }
+
+                result = false; // idk how you managed to trigger this.
+            }
+            else // diagonal
+            {
+                System.out.println("is a diagonal");
+                if(GetBoardValue(oldPos[1], oldPos[0]) == playerChar)
+                {
+                    SetBoardValue(pos[0], pos[1], playerChar, true);
+                    result = true;
+                }
+                result = false;
+            }
+        } 
+        else
+        {
+            for (int y = -1; y <= 1; y++) {
+                for (int x = -1; x <= 1; x++) {
+                    int[] lookoutPos = new int[] { pos[0] + y, pos[1] + x };
+
+                    if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length
+                            && lookoutPos[1] <= board.length) {
+                        char value = GetBoardValue(lookoutPos[0], lookoutPos[1]);
+
+                        if (value != '·' && value != playerChar) {
+                            result = FindNeighbors(lookoutPos, playerChar, pos);
+                        } else if (value == playerChar) {
+                            result = true;
+                        }
+                    }
+                }
+            }
         }
+
+        return result;
     }
 
     static void Init() {
@@ -84,15 +128,16 @@ public class Program {
                 System.out.println("Player 1 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
-                FindNeighbors(pInput);
+                FindNeighbors(boardPos, 'O', new int[] { -1, -1 });
                 res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
                 break;
             case Player2:
                 System.out.println("Player 2 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
-                FindNeighbors(pInput);
+                FindNeighbors(boardPos, 'X', new int[] { -1, -1 });
                 res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
+                
                 break;
         }
 
@@ -103,6 +148,7 @@ public class Program {
                 currentPlayerTurn = PlayerTurn.Player1;
             }
         } else {
+            System.out.println("Failed to fetch player input");
             HandlePlayerInput();
         }
     }
