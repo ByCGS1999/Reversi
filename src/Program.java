@@ -12,6 +12,7 @@ public class Program
     static char[][] board;
     static Scanner s;
     static boolean isPlaying = false;
+    static PlayerTurn currentPlayerTurn = PlayerTurn.Player1;
 
     static void SetBoardValue(int x, int y, char c)
     {
@@ -38,7 +39,16 @@ public class Program
 
     static void HandlePlayerInput(PlayerTurn player)
     {
+        switch (player) {
+            case Player1:
+                
+                break;
+            case Player2:
 
+                break;
+            default:
+                break;
+        }
     }
 
     static void OutputBoard()
@@ -62,7 +72,7 @@ public class Program
 
         while(isPlaying)
         {
-
+            HandlePlayerInput(currentPlayerTurn);
         }
 
         s.close();
