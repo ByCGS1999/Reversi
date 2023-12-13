@@ -30,6 +30,8 @@ public class Program {
     }
 
     static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos) {
+        boolean result = false;
+        
         if (oldPos[0] != -1 && oldPos[0] != -1) 
         {
             if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
@@ -54,10 +56,10 @@ public class Program {
                 if(GetBoardValue(targetPos[0], targetPos[1]) == playerChar)
                 {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    return true;
+                    result = true;
                 }
 
-                return false; // idk how you managed to trigger this.
+                result = false; // idk how you managed to trigger this.
             }
             else // diagonal
             {
@@ -65,9 +67,9 @@ public class Program {
                 if(GetBoardValue(oldPos[1], oldPos[0]) == playerChar)
                 {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    return true;
+                    result = true;
                 }
-                return false;
+                result = false;
             }
         } 
         else
@@ -81,16 +83,16 @@ public class Program {
                         char value = GetBoardValue(lookoutPos[0], lookoutPos[1]);
 
                         if (value != '·' && value != playerChar) {
-                            return FindNeighbors(lookoutPos, playerChar, pos);
+                            result = FindNeighbors(lookoutPos, playerChar, pos);
                         } else if (value == playerChar) {
-                            return true;
+                            result = true;
                         }
                     }
                 }
             }
         }
 
-        return false;
+        return result;
     }
 
     static void Init() {
