@@ -48,10 +48,9 @@ public class Program {
 
         return false;
     }
-
-    static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos) {
-        boolean result = false;
-        
+    
+    static void Turn(int[] pos, char playerChar, int[] oldPos)
+    {
         if (oldPos[0] != -1 && oldPos[0] != -1) 
         {
             if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
@@ -76,10 +75,7 @@ public class Program {
                 if(GetBoardValue(targetPos[0], targetPos[1]) == playerChar)
                 {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    result = true;
                 }
-
-                result = false; // idk how you managed to trigger this.
             }
             else // diagonal
             {
@@ -87,21 +83,22 @@ public class Program {
                 if(GetBoardValue(oldPos[1], oldPos[0]) == playerChar)
                 {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    result = true;
                 }
-                result = false;
             }
         } 
-        else
-        {
-            for(int layer = 0; layer < 8; layer++)
-            {
-                ArrayList<int[]> list = GetNeighbors(oldPos, layer);
+    }
 
-                for(int[] l : list)
-                {
-                    
-                }
+    static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos)
+    {
+        boolean result = false;
+        
+        for(int layer = 0; layer < 8; layer++)
+        {
+            ArrayList<int[]> list = GetNeighbors(oldPos, layer);
+
+            for(int[] l : list)
+            {
+
             }
         }
 
