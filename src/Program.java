@@ -94,20 +94,13 @@ public class Program {
         } 
         else
         {
-            for (int y = -1; y <= 1; y++) {
-                for (int x = -1; x <= 1; x++) {
-                    int[] lookoutPos = new int[] { pos[0] + y, pos[1] + x };
+            for(int layer = 0; layer < 8; layer++)
+            {
+                ArrayList<int[]> list = GetNeighbors(oldPos, layer);
 
-                    if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length
-                            && lookoutPos[1] <= board.length) {
-                        char value = GetBoardValue(lookoutPos[0], lookoutPos[1]);
-
-                        if (value != '·' && value != playerChar) {
-                            result = FindNeighbors(lookoutPos, playerChar, pos);
-                        } else if (value == playerChar) {
-                            result = true;
-                        }
-                    }
+                for(int[] l : list)
+                {
+                    
                 }
             }
         }
