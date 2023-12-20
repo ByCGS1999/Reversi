@@ -1,6 +1,8 @@
 package src;
 
 import java.util.*;
+import src.Interfaces.*;
+import src.Classes.*;
 
 public class Program {
     enum PlayerTurn {
@@ -8,10 +10,11 @@ public class Program {
         Player2
     }
 
-    static char[][] board;
+    public static char[][] board;
     static Scanner s;
     static boolean isPlaying = false;
     static PlayerTurn currentPlayerTurn = PlayerTurn.Player1;
+    static List<Ray> rays = new ArrayList<Ray>();
 
     static char GetBoardValue(int x, int y) {
         return board[x][y];
@@ -37,7 +40,7 @@ public class Program {
         return positions;
     }
 
-    static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
+    public static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
         if (hasAuthority) {
             board[x][y] = c;
             return true;
@@ -92,14 +95,27 @@ public class Program {
     {
         boolean result = false;
         
-        for(int layer = 0; layer < 8; layer++)
+        int[] tl = {-1, -1};
+        int[] tc = { 0, -1};
+        int[] tr = { 1, -1};
+        int[] cl = {-1, 0};
+        int[] cr = { 1, 0};
+        int[] bl = {-1, 1};
+        int[] bc = { 0, 1};
+        int[] br = { 1, 1};
+
+        rays.add(new Ray(pos, tl, null, null, playerChar));
+        rays.add(new Ray(pos, tc, null, null, playerChar));
+        rays.add(new Ray(pos, tr, null, null, playerChar));
+        rays.add(new Ray(pos, cl, null, null, playerChar));
+        rays.add(new Ray(pos, cr, null, null, playerChar));
+        rays.add(new Ray(pos, bl, null, null, playerChar));
+        rays.add(new Ray(pos, bc, null, null, playerChar));
+        rays.add(new Ray(pos, br, null, null, playerChar));
+
+        for (Ray r : rays) 
         {
-            ArrayList<int[]> list = GetNeighbors(oldPos, layer);
-
-            for(int[] l : list)
-            {
-
-            }
+            r.Execute();
         }
 
         return result;
@@ -107,6 +123,7 @@ public class Program {
 
     static void Init() {
         board = new char[8][8];
+        rays = new ArrayList<Ray>();
 
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
@@ -139,7 +156,8 @@ public class Program {
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
                 FindNeighbors(boardPos, 'O', new int[] { -1, -1 });
-                res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
+                res = true;
+                //res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
                 break;
             case Player2:
                 System.out.println("Player 2 Turn:");
@@ -150,6 +168,8 @@ public class Program {
                 
                 break;
         }
+
+        rays.clear();
 
         if (res) {
             if (currentPlayerTurn == PlayerTurn.Player1) {
