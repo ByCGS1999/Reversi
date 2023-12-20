@@ -56,12 +56,25 @@ public class Ray implements IRay
 
     public void Execute()
     {
+        if(hasChild()) 
+        {
+            getChild().Execute();
+            return;
+        }
+
+        if(hasParent())
+        {
+            if(getParent().hasResult)
+            {
+                hasResult = true;
+                return;
+            }
+        }
+
         int[] newPosition = { x+dir_x, y+dir_y };
         int[] newDirection = {dir_x, dir_y};
         int _x = newPosition[0];
         int _y = newPosition[1];
-
-        Program.board[_x][_y] = '*';
 
         if(_x < 0 || _y < 0)
         {
@@ -69,7 +82,7 @@ public class Ray implements IRay
             return;
         }
 
-        if(_x < 8 || _y < 8)
+        if(_x >= 8 || _y >= 8)
         {
             hasResult = true;
             return;
@@ -86,5 +99,7 @@ public class Ray implements IRay
             childRay = new Ray(newPosition, newDirection, null, this, playerChar);
             childRay.Execute();
         }
+
+        Program.board[_x][_y] = '*';
     }
 }
