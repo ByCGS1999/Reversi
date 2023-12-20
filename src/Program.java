@@ -1,7 +1,19 @@
+/***
+ *       ___                                              _    
+ *      | _ \    ___    __ __    ___      _ _    ___     (_)   
+ *      |   /   / -_)   \ V /   / -_)    | '_|  (_-<     | |   
+ *      |_|_\   \___|   _\_/_   \___|   _|_|_   /__/_   _|_|_  
+ *    _|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""| 
+ *    "`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-' 
+ */
+
+ /*
+  * CGS & FEAR
+  */
+
 package src;
 
 import java.util.*;
-import src.Interfaces.*;
 import src.Classes.*;
 
 public class Program {
@@ -18,26 +30,6 @@ public class Program {
 
     static char GetBoardValue(int x, int y) {
         return board[x][y];
-    }
-
-    static ArrayList<int[]> GetNeighbors(int[] pos, int layer)
-    {
-        ArrayList<int[]> positions = new ArrayList<int[]>();
-
-        for (int y = -1; y <= 1; y++) 
-        {
-            for (int x = -1; x <= 1; x++) 
-            {
-                int[] lookoutPos = new int[] { pos[0] + layer + y, pos[1] + layer + x };
-
-                if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length && lookoutPos[1] <= board.length)
-                {
-                    positions.add(lookoutPos);
-                }
-            }
-        }
-
-        return positions;
     }
 
     static boolean HasNeighbor(int x, int y, char playerChar)
@@ -89,40 +81,7 @@ public class Program {
         return false;
     }
     
-    static void Turn(int[] pos, char playerChar, int[] oldPos)
-    {
-        if (oldPos[0] != -1 && oldPos[0] != -1) 
-        {
-            if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
-            {
-                System.out.println("is a line");
-                int[] targetPos = pos;
-                // identify the not equal one
-                if (pos[0] != oldPos[0]) {
-                    int yOff = pos[0] - oldPos[0];
-                    targetPos = new int[] { pos[0] + yOff, pos[1] };
-                } else if (pos[1] != oldPos[1]) {
-                    int xOff = pos[1] - oldPos[1];
-                    targetPos = new int[] { pos[0], pos[1] + xOff };
-                }
-
-                System.out.println(targetPos[0]);
-                System.out.println(targetPos[1]);
-
-                if (GetBoardValue(targetPos[0], targetPos[1]) == playerChar) {
-                    SetBoardValue(pos[0], pos[1], playerChar, true);
-                }
-            }
-            else // diagonal
-            {
-                System.out.println("is a diagonal");
-                if (GetBoardValue(oldPos[1], oldPos[0]) == playerChar) {
-                    SetBoardValue(pos[0], pos[1], playerChar, true);
-                }
-            }
-        } 
-    }
-
+    
     static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos)
     {
         boolean result = false;
