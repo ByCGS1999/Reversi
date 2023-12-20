@@ -1,6 +1,8 @@
 package src;
 
 import java.util.*;
+import src.Interfaces.*;
+import src.Classes.*;
 
 public class Program {
     enum PlayerTurn {
@@ -8,16 +10,74 @@ public class Program {
         Player2
     }
 
-    static char[][] board;
+    public static char[][] board;
     static Scanner s;
     static boolean isPlaying = false;
     static PlayerTurn currentPlayerTurn = PlayerTurn.Player1;
+    static List<Ray> rays = new ArrayList<Ray>();
 
     static char GetBoardValue(int x, int y) {
         return board[x][y];
     }
 
-    static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
+    static ArrayList<int[]> GetNeighbors(int[] pos, int layer)
+    {
+        ArrayList<int[]> positions = new ArrayList<int[]>();
+
+        for (int y = -1; y <= 1; y++) 
+        {
+            for (int x = -1; x <= 1; x++) 
+            {
+                int[] lookoutPos = new int[] { pos[0] + layer + y, pos[1] + layer + x };
+
+                if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length && lookoutPos[1] <= board.length)
+                {
+                    positions.add(lookoutPos);
+                }
+            }
+        }
+
+        return positions;
+    }
+
+    static boolean HasNeighbor(int x, int y, char playerChar)
+    {
+        int[][] possible_positions = {
+        new int[] {x-1,y-1},
+        new int[] {x,y-1},
+        new int[] {x+1,y-1},
+        new int[] {x-1,y},
+        new int[] {x+1,y},
+        new int[] {x-1,y+1},
+        new int[] {x,y+1},
+        new int[] {x+1,y+1},
+        };
+
+        for(int i = 0; i < possible_positions.length; i++)
+        {
+            if(possible_positions[i][0] <= 0)
+                continue;
+
+            if(possible_positions[i][1] <= 0)
+                continue;
+
+            if(possible_positions[i][0] >= 8)
+                continue;
+
+            if(possible_positions[i][1] >= 8)
+                continue;
+
+            int bX = possible_positions[i][0];
+            int bY = possible_positions[i][1];
+
+            if(GetBoardValue(bX, bY) == playerChar)
+                return true;
+        }
+
+        return false;
+    }
+
+    public static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
         if (hasAuthority) {
             board[x][y] = c;
             return true;
@@ -28,12 +88,12 @@ public class Program {
 
         return false;
     }
-
-    static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos) {
-        boolean result = false;
-
-        if (oldPos[0] != -1 && oldPos[0] != -1) {
-            if (pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
+    
+    static void Turn(int[] pos, char playerChar, int[] oldPos)
+    {
+        if (oldPos[0] != -1 && oldPos[0] != -1) 
+        {
+            if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
             {
                 System.out.println("is a line");
                 int[] targetPos = pos;
@@ -51,34 +111,60 @@ public class Program {
 
                 if (GetBoardValue(targetPos[0], targetPos[1]) == playerChar) {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    result = true;
                 }
-
-                result = false; // idk how you managed to trigger this.
-            } else // diagonal
+            }
+            else // diagonal
             {
                 System.out.println("is a diagonal");
                 if (GetBoardValue(oldPos[1], oldPos[0]) == playerChar) {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
-                    result = true;
                 }
-                result = false;
             }
-        } else {
-            for (int y = -1; y <= 1; y++) {
-                for (int x = -1; x <= 1; x++) {
-                    int[] lookoutPos = new int[] { pos[0] + y, pos[1] + x };
+        } 
+    }
 
-                    if (lookoutPos[0] >= 0 && lookoutPos[1] >= 0 && lookoutPos[0] <= board.length
-                            && lookoutPos[1] <= board.length) {
-                        char value = GetBoardValue(lookoutPos[0], lookoutPos[1]);
+    static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos)
+    {
+        boolean result = false;
+        
+        int[] tl = {-1, -1};
+        int[] tc = { 0, -1};
+        int[] tr = { 1, -1};
+        int[] cl = {-1, 0};
+        int[] cr = { 1, 0};
+        int[] bl = {-1, 1};
+        int[] bc = { 0, 1};
+        int[] br = { 1, 1};
 
-                        if (value != '·' && value != playerChar) {
-                            result = FindNeighbors(lookoutPos, playerChar, pos);
-                        } else if (value == playerChar) {
-                            result = true;
-                        }
-                    }
+        rays.add(new Ray(pos, tl, null, null, playerChar));
+        rays.add(new Ray(pos, tc, null, null, playerChar));
+        rays.add(new Ray(pos, tr, null, null, playerChar));
+        rays.add(new Ray(pos, cl, null, null, playerChar));
+        rays.add(new Ray(pos, cr, null, null, playerChar));
+        rays.add(new Ray(pos, bl, null, null, playerChar));
+        rays.add(new Ray(pos, bc, null, null, playerChar));
+        rays.add(new Ray(pos, br, null, null, playerChar));
+
+        for (Ray r : rays) 
+        {
+            r.Execute();
+        }
+
+        for(Ray r : rays)
+        {
+            if(r.hasResult && r.hasTarget)
+            {
+                board[r.x][r.y] = playerChar;
+                continue;
+            }
+            else if(r.childHasResult)
+            {
+                Ray targetRay = r;
+
+                while(targetRay.hasChild() && targetRay.getChild().childHasTarget)
+                {
+                    SetBoardValue(r.x, r.y, playerChar, true);
+                    targetRay = targetRay.getChild();
                 }
             }
         }
@@ -88,7 +174,8 @@ public class Program {
 
     static void Init() {
         board = new char[8][8];
-        src.Watermark.Motd.M();
+        rays = new ArrayList<Ray>();
+
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 board[x][y] = '·';
@@ -119,18 +206,23 @@ public class Program {
                 System.out.println("Player 1 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
+                if(HasNeighbor(boardPos[0], boardPos[1], 'O'))
+                    res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
                 FindNeighbors(boardPos, 'O', new int[] { -1, -1 });
-                res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
+                
                 break;
             case Player2:
                 System.out.println("Player 2 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
+                if(HasNeighbor(boardPos[0], boardPos[1], 'X'))
+                    res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
                 FindNeighbors(boardPos, 'X', new int[] { -1, -1 });
-                res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
-
+                
                 break;
         }
+
+        rays.clear();
 
         if (res) {
             if (currentPlayerTurn == PlayerTurn.Player1) {
