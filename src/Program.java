@@ -230,7 +230,7 @@ public class Program {
     static void menu() {
         src.Watermark.RTX.Water();
 
-        System.out.println(src.Watermark.Motd.Message0());
+        System.out.println(src.Watermark.Motd.Message0();
 
         System.out.println("+----------------------------------+");
         System.out.println("| 1.Play                           |");
