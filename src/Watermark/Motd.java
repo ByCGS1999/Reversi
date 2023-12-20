@@ -17,6 +17,7 @@ public class Motd {
         mes.add("Limited edition!");
         mes.add("Made by CGS!");
         mes.add("Made by FEAR!");
+        mes.add("Made by CGS & FEAR!");
         mes.add("Uses GrassTracing!");
         mes.add("Not on Steam!");
         mes.add("90% bug free!");
