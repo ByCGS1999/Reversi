@@ -31,49 +31,40 @@ public class Program {
 
     static boolean FindNeighbors(int[] pos, char playerChar, int[] oldPos) {
         boolean result = false;
-        
-        if (oldPos[0] != -1 && oldPos[0] != -1) 
-        {
-            if(pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
+
+        if (oldPos[0] != -1 && oldPos[0] != -1) {
+            if (pos[0] == oldPos[0] || pos[1] == oldPos[1]) // (line)
             {
                 System.out.println("is a line");
                 int[] targetPos = pos;
                 // identify the not equal one
-                if(pos[0] != oldPos[0])
-                {
-                    int yOff = pos[0]-oldPos[0];
-                    targetPos = new int[] { pos[0]+yOff, pos[1] };
-                }
-                else if(pos[1] != oldPos[1])
-                {
-                    int xOff = pos[1]-oldPos[1];
-                    targetPos = new int[] { pos[0], pos[1]+xOff };
+                if (pos[0] != oldPos[0]) {
+                    int yOff = pos[0] - oldPos[0];
+                    targetPos = new int[] { pos[0] + yOff, pos[1] };
+                } else if (pos[1] != oldPos[1]) {
+                    int xOff = pos[1] - oldPos[1];
+                    targetPos = new int[] { pos[0], pos[1] + xOff };
                 }
 
                 System.out.println(targetPos[0]);
                 System.out.println(targetPos[1]);
 
-                if(GetBoardValue(targetPos[0], targetPos[1]) == playerChar)
-                {
+                if (GetBoardValue(targetPos[0], targetPos[1]) == playerChar) {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
                     result = true;
                 }
 
                 result = false; // idk how you managed to trigger this.
-            }
-            else // diagonal
+            } else // diagonal
             {
                 System.out.println("is a diagonal");
-                if(GetBoardValue(oldPos[1], oldPos[0]) == playerChar)
-                {
+                if (GetBoardValue(oldPos[1], oldPos[0]) == playerChar) {
                     SetBoardValue(pos[0], pos[1], playerChar, true);
                     result = true;
                 }
                 result = false;
             }
-        } 
-        else
-        {
+        } else {
             for (int y = -1; y <= 1; y++) {
                 for (int x = -1; x <= 1; x++) {
                     int[] lookoutPos = new int[] { pos[0] + y, pos[1] + x };
@@ -97,7 +88,7 @@ public class Program {
 
     static void Init() {
         board = new char[8][8];
-
+        src.Watermark.Motd.M();
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 board[x][y] = '·';
@@ -137,7 +128,7 @@ public class Program {
                 boardPos = toBoardPosition(pInput);
                 FindNeighbors(boardPos, 'X', new int[] { -1, -1 });
                 res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
-                
+
                 break;
         }
 
@@ -237,14 +228,9 @@ public class Program {
     }
 
     static void menu() {
-        System.out.println(" _______ _________            _______  _     ");
-        System.out.println("(  _  _ )\__   __/|\     /|  (  ___  )( (    /|");
-        System.out.println("| (    )|   ) (   ( \   / )  | (   ) ||  \  ( |");
-        System.out.println("| (____)|   | |    \ (_) /   | |   | ||   \ | |");
-        System.out.println("|     __)   | |     ) _ (    | |   | || (\ \) |");
-        System.out.println("| (\ (      | |    / ( ) \   | |   | || | \   |");
-        System.out.println("| ) \ \__   | |   ( /   \ )  | (___) || )  \  |");
-        System.out.println("|/   \__/   )_(   |/     \|  (_______)|/    )_)");
+        src.Watermark.RTX.Water();
+
+        System.out.println(src.Watermark.Motd.Message0());
 
         System.out.println("+----------------------------------+");
         System.out.println("| 1.Play                           |");
