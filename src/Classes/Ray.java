@@ -11,12 +11,13 @@ public class Ray implements IRay
     public int dir_x,dir_y;
 
     public boolean hasResult, hasTarget = false;
+    public boolean childHasResult, childHasTarget;
 
     public Ray childRay = null;
     public Ray parentRay = null;
 
     public char playerChar;
-    public char raytraceChar = '*';
+    public char raytraceChar = '·';
 
     public Ray(int[] pos, int[] dir, Ray child, Ray parent, char expectedChar)
     {
@@ -52,6 +53,15 @@ public class Ray implements IRay
     public Ray getParent()
     {
         return parentRay;
+    }
+
+    public void SetResult(boolean target)
+    {
+        childHasResult = true;
+        childHasTarget = target;
+
+        if(hasParent())
+            getParent().SetResult(target);
     }
 
     public void Execute()
@@ -92,14 +102,19 @@ public class Ray implements IRay
         {
             hasResult = true;
             hasTarget = true;
+
+            Program.board[x][y] = playerChar;
+
+            if(hasParent())
+                getParent().SetResult(hasTarget);
+
             return;
         }
         else
         {
+            Program.board[_x][_y] = raytraceChar;
             childRay = new Ray(newPosition, newDirection, null, this, playerChar);
             childRay.Execute();
         }
-
-        Program.board[_x][_y] = '*';
     }
 }

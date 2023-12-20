@@ -40,6 +40,43 @@ public class Program {
         return positions;
     }
 
+    static boolean HasNeighbor(int x, int y, char playerChar)
+    {
+        int[][] possible_positions = {
+        new int[] {x-1,y-1},
+        new int[] {x,y-1},
+        new int[] {x+1,y-1},
+        new int[] {x-1,y},
+        new int[] {x+1,y},
+        new int[] {x-1,y+1},
+        new int[] {x,y+1},
+        new int[] {x+1,y+1},
+        };
+
+        for(int i = 0; i < possible_positions.length; i++)
+        {
+            if(possible_positions[i][0] <= 0)
+                continue;
+
+            if(possible_positions[i][1] <= 0)
+                continue;
+
+            if(possible_positions[i][0] >= 8)
+                continue;
+
+            if(possible_positions[i][1] >= 8)
+                continue;
+
+            int bX = possible_positions[i][0];
+            int bY = possible_positions[i][1];
+
+            if(GetBoardValue(bX, bY) == playerChar)
+                return true;
+        }
+
+        return false;
+    }
+
     public static boolean SetBoardValue(int x, int y, char c, boolean hasAuthority) {
         if (hasAuthority) {
             board[x][y] = c;
@@ -118,6 +155,25 @@ public class Program {
             r.Execute();
         }
 
+        for(Ray r : rays)
+        {
+            if(r.hasResult && r.hasTarget)
+            {
+                board[r.x][r.y] = playerChar;
+                continue;
+            }
+            else if(r.childHasResult)
+            {
+                Ray targetRay = r;
+
+                while(targetRay.hasChild() && targetRay.getChild().childHasTarget)
+                {
+                    SetBoardValue(r.x, r.y, playerChar, true);
+                    targetRay = targetRay.getChild();
+                }
+            }
+        }
+
         return result;
     }
 
@@ -155,16 +211,18 @@ public class Program {
                 System.out.println("Player 1 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
+                if(HasNeighbor(boardPos[0], boardPos[1], 'O'))
+                    res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
                 FindNeighbors(boardPos, 'O', new int[] { -1, -1 });
-                res = true;
-                //res = SetBoardValue(boardPos[0], boardPos[1], 'O', false);
+                
                 break;
             case Player2:
                 System.out.println("Player 2 Turn:");
                 pInput = s.nextLine();
                 boardPos = toBoardPosition(pInput);
+                if(HasNeighbor(boardPos[0], boardPos[1], 'X'))
+                    res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
                 FindNeighbors(boardPos, 'X', new int[] { -1, -1 });
-                res = SetBoardValue(boardPos[0], boardPos[1], 'X', false);
                 
                 break;
         }
