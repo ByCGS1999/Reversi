@@ -135,6 +135,8 @@ public class Program {
         board = new char[8][8];
         rays = new ArrayList<Ray>();
 
+        src.Watermark.Motd.M();
+
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 board[x][y] = '·';
