@@ -110,7 +110,7 @@ public class Ray implements IRay
         }
         else
         {
-            Program.board[_x][_y] = raytraceChar;
+            //Program.board[_x][_y] = raytraceChar;
             childRay = new Ray(newPosition, newDirection, null, this, playerChar);
             childRay.Execute();
         }
